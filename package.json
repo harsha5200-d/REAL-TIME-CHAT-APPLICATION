@@ -1,0 +1,9 @@
+{
+  "name": "real-time-chat-application",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix backend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix Frontend/chat-app run dev"
+  }
+}
