@@ -4,6 +4,7 @@ import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import dns from "node:dns";
 import cookieParser from "cookie-parser"
+import messageRoutes from "./routes/message.route.js"
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use(cookieParser())
 
 app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
+
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
