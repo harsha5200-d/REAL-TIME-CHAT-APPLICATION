@@ -1,57 +1,103 @@
-import { generateToken } from "../lib/utils";
-import User from "../models/user.model"
+import { generateToken } from "../lib/utils.js";
+import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
-export const signup = (req,res) =>{
+export const signup = async (req, res) => {
     
-    const {fullname, email, password} = req.body;
-    try{
-        if(password.length < 6)
-        {
-            return res.status(400).json({message : "password must be at least 6 characters "})
+    const { fullName, email, password } = req.body;
+    try {
+        if (!fullName || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
         }
+
+        if (password.length < 6) {
+            return res.status(400).json({ message: "password must be at least 6 characters " });
+        }
+
+        const user = await User.findOne({ email });
+
+        if (user) return res.status(400).json({ message: "Email already exists" });
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = new User({
+            fullName: fullName,
+            email: email,
+            password: hashedPassword
+        });
+
+        if (newUser) {
+            generateToken(newUser._id, res);
+            await newUser.save();
+
+            res.status(201).json({
+                _id: newUser._id,
+                fullName: newUser.fullName,
+                email: newUser.email,
+                profilePic: newUser.profilePic,
+            });
+        } else {
+            res.status(400).json({ message: "Invalid user data" });
+        }
+    } catch (error) {
+        console.log("Error in signup controller", error.message);
+        res.status(500).json({
+            message: "internal server error"
+        });
+    }
+}
+
+export const login = async (req,res) =>{
+    
+    const {email, password} = req.body;
+    try{
 
         const user = await User.findOne({email})
 
-        if (user) return res.status(400).json({message: "Email already exists"})
+        if(!user)
+        {
+            return res.status(400).json({message: "invalid credentails"})
+        }
 
-        const salt = await bycrypt.getSalt(10)
-        const hashedPassword = await bycrypt.hash(password,salt)
+        const isPasswordcorrect = await bcrypt.compare(password,user.password)
+        if(!isPasswordcorrect)
+        {
+            return res.status(400).json({
+                message: "invalid credentails "
+            })
+        }
 
-        const newUser = new user({
-            fullName : fullName,
-            email : email,
-            password : hashedPassword
+        generateToken(user._id,res)
+
+        res.status(200).json({
+            _id : user._id,
+            fullname : user.fullName,
+            email : user.email,
+            poofilepic: user.profilePic,
         })
 
-        if(newUser)
-        {
-               generateToken(newUser._id,res);
-               await newUser.save();
-
-               res.status(201).json({
-                _id : newUser._id,
-                fullName : newUser.fullName,
-                email : newUser.email,
-                profilepic : newUser.profilepic,
-               })
-        }
-        else
-        {
-
-        }
+        
     }catch(error)
     {
-        console.log("Error is signup controller", error.message);
+        console.log("error in login controller",error.message);
         res.status(500).json({
-            message: "interna server message"
+            message: "interval server error"
         })
     }
 }
 
-export const login = (req,res) =>{
-    res.send("login route ")
-}
-
 export const logout = (req,res) =>{
-    res.send("logout route ")
+    try{
+        res.cookie("jwt","",{maxAge:0});
+        res.status(500).json(({message:"logged out succcessfully"}));
+
+    }catch(error){
+        console.log("error in input controller", error.message);
+        res.status(500).json(({message:"internal server error"}));
+    }
 };
+
+export const updateProfile = async(req,res)=>{
+    
+}
