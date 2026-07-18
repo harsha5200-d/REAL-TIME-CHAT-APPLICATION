@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.routes.js";
 import dns from "node:dns";
 import cookieParser from "cookie-parser"
 import messageRoutes from "./routes/message.route.js"
+import cors from "cors"
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
@@ -13,6 +14,10 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser())
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentails:true,
+}))
 
 app.use("/api/auth", authRoutes);
 app.use("/api/message", messageRoutes);
