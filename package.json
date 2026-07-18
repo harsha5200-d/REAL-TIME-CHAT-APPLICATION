@@ -5,5 +5,14 @@
     "dev": "npm --prefix backend run dev",
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix Frontend/chat-app run dev"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "axios": "^1.18.1",
+    "react": "^19.2.7",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.18.1",
+    "tailwindcss": "^4.3.3",
+    "zustand": "^5.0.14"
   }
 }
