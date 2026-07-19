@@ -2,7 +2,7 @@
   "name": "real-time-chat-application",
   "private": true,
   "scripts": {
-    "dev": "npm --prefix backend run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix Frontend/chat-app run dev"
   },
@@ -14,5 +14,8 @@
     "react-router-dom": "^7.18.1",
     "tailwindcss": "^4.3.3",
     "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
   }
 }
