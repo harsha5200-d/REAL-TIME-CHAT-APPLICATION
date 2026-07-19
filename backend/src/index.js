@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
   origin:"http://localhost:5173",
-  credentails:true,
+  credentials:true,
 }))
 
 app.use("/api/auth", authRoutes);
