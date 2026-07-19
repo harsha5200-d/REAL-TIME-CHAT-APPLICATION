@@ -7,7 +7,9 @@ import SignupPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingPage";
 import ProfilePage from "./pages/ProfilePage";
-
+import { Navigate } from "react-router-dom";
+import { Loader } from "lucide-react";
+import { useAuthStore } from "./store/useAuthStore";
 
 const App = () => {
 
