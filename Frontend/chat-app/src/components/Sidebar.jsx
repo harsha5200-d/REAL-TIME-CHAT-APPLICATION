@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { useAuthStore } from "../store/useAuthStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Users } from "lucide-react";
+import { Users, Trash2 } from "lucide-react";
 import { getInitials, getAvatarColor } from "../lib/utils";
 
 const Sidebar = () => {
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
+  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading, hideContact } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
@@ -75,12 +75,25 @@ const Sidebar = () => {
             </div>
 
             {/* User info - only visible on larger screens */}
-            <div className="hidden lg:block text-left min-w-0">
+            <div className="hidden lg:block text-left min-w-0 flex-1">
               <div className="font-medium truncate">{user.fullName}</div>
               <div className="text-sm text-zinc-400">
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>
             </div>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (window.confirm("Are you sure you want to delete this contact?")) {
+                  hideContact(user._id);
+                }
+              }}
+              className="hidden lg:flex items-center justify-center p-2 text-zinc-400 hover:text-red-500 rounded-full hover:bg-base-100 transition-colors ml-auto"
+              title="Delete Contact"
+            >
+              <Trash2 className="size-4" />
+            </button>
           </button>
         ))}
 
