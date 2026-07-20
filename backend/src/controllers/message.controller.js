@@ -6,11 +6,32 @@ import { getReceiverSocketId, io } from "../lib/socket.js";
 export const getUsersForSidebar = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
-        const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+        const hiddenContacts = req.user.hiddenContacts || [];
+        const filteredUsers = await User.find({ 
+            _id: { $ne: loggedInUserId, $nin: hiddenContacts } 
+        }).select("-password");
 
         res.status(200).json(filteredUsers);
     } catch (error) {
         console.error("Error in getUsersForSidebar: ", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const hideContact = async (req, res) => {
+    try {
+        const { id: contactIdToHide } = req.params;
+        const userId = req.user._id;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $addToSet: { hiddenContacts: contactIdToHide } },
+            { new: true }
+        ).select("-password");
+
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.error("Error in hideContact: ", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 };
