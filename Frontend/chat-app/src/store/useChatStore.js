@@ -22,6 +22,19 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
+  hideContact: async (userId) => {
+    try {
+      await axiosInstance.post(`/messages/hide-contact/${userId}`);
+      set((state) => ({
+        users: state.users.filter((user) => user._id !== userId),
+        selectedUser: state.selectedUser?._id === userId ? null : state.selectedUser,
+      }));
+      toast.success("Contact hidden successfully");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to hide contact");
+    }
+  },
+
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
     try {
