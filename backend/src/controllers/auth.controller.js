@@ -37,6 +37,7 @@ export const signup = async (req, res) => {
                 fullName: newUser.fullName,
                 email: newUser.email,
                 profilePic: newUser.profilePic,
+                createdAt: newUser.createdAt,
             });
         } else {
             res.status(400).json({ message: "Invalid user data" });
@@ -76,6 +77,7 @@ export const login = async (req,res) =>{
             fullName: user.fullName,
             email: user.email,
             profilePic: user.profilePic,
+            createdAt: user.createdAt,
         })
 
         
@@ -90,7 +92,12 @@ export const login = async (req,res) =>{
 
 export const logout = (req,res) =>{
     try{
-        res.cookie("jwt","",{maxAge:0});
+        res.cookie("jwt", "", {
+            maxAge: 0,
+            httpOnly: true,
+            sameSite: process.env.NODE_ENV === "development" ? "strict" : "none",
+            secure: process.env.NODE_ENV !== "development",
+        });
         res.status(200).json(({message:"logged out succcessfully"}));
     }catch(error){
         console.log("error in input controller", error.message);
