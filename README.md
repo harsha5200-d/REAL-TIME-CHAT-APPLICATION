@@ -6,7 +6,7 @@
     A full-stack, real-time messaging application built with the MERN stack and Socket.io.
     <br />
     <br />
-    <a href="https://your-live-demo-link.com"><strong>🔴 View Live Demo </strong></a>
+    <a href="https://real-time-chat-application-iota-lilac.vercel.app/"><strong>🔴 View Live Demo </strong></a>
     ·
     <a href="https://github.com/your-username/REAL-TIME-CHAT-APPLICATION/issues">Report Bug</a>
     ·
