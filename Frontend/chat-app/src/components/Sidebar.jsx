@@ -85,9 +85,7 @@ const Sidebar = () => {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                if (window.confirm("Connect saying Are you sure you want to delete this contact?")) {
-                  hideContact(user._id);
-                }
+                hideContact(user._id);
               }}
               className="hidden lg:flex items-center justify-center p-2 text-zinc-400 hover:text-red-500 rounded-full hover:bg-base-100 transition-colors ml-auto"
               title="Delete Contact"
